@@ -1,5 +1,17 @@
 # Book-Recommandation-System
 
+
+## workflow 
+- config.yaml
+- entity
+- config/configuration.py
+- component
+- pipeline 
+- endpoint 
+- app.py 
+
+
+
 # How to run? 
 ### STEPS:
 
