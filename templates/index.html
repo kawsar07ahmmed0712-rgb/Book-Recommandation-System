@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShelfForge | Book Recommendation Studio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+    <div class="ambient-glow"></div>
+    <div class="grain"></div>
+
+    <header class="site-header">
+        <a href="{{ url_for('home') }}" class="brand">
+            <span class="brand-dot"></span>
+            <span class="brand-name">ShelfForge</span>
+        </a>
+
+        <form action="{{ url_for('train_model') }}" method="post">
+            <button type="submit" class="btn btn-secondary">Train Pipeline</button>
+        </form>
+    </header>
+
+    <main class="page-shell">
+        <section class="hero">
+            <p class="hero-kicker">BOOK RECOMMENDATION SYSTEM</p>
+            <h1>Find your next page-turner with one click.</h1>
+            <p class="hero-copy">
+                Collaborative filtering engine with a cinematic interface, fast lookup, and clean recommendations.
+            </p>
+            <div class="hero-metrics">
+                <article class="metric-card">
+                    <p class="metric-value">{{ total_books }}</p>
+                    <p class="metric-label">Books Indexed</p>
+                </article>
+                <article class="metric-card">
+                    <p class="metric-value">KNN</p>
+                    <p class="metric-label">Recommendation Model</p>
+                </article>
+                <article class="metric-card">
+                    <p class="metric-value">{{ model_name }}</p>
+                    <p class="metric-label">Artifact File</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="control-panel">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-stack">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% if artifacts_missing %}
+                <div class="status-card status-warning">
+                    <p>Recommendation artifacts are missing. Run <strong>Train Pipeline</strong> to generate them.</p>
+                    {% if missing_artifacts %}
+                        <p class="status-meta">Missing: {{ missing_artifacts | join(', ') }}</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <form action="{{ url_for('recommend_books') }}" method="post" class="recommend-form" autocomplete="off">
+                <label for="book-input">Book title</label>
+                <div class="input-row">
+                    <input
+                        id="book-input"
+                        name="book_name"
+                        type="text"
+                        placeholder="Start typing a title..."
+                        value="{{ selected_book }}"
+                        data-suggestions-url="{{ url_for('book_suggestions') }}"
+                        {% if artifacts_missing %}disabled{% endif %}
+                        required
+                    >
+                    <button type="submit" class="btn btn-primary" {% if artifacts_missing %}disabled{% endif %}>
+                        Recommend
+                    </button>
+                </div>
+                <ul id="suggestions" class="suggestions" role="listbox" aria-label="Book suggestions"></ul>
+            </form>
+        </section>
+
+        {% if recommendations %}
+            <section class="results-panel">
+                <h2>Recommended for "{{ selected_book }}"</h2>
+                <div class="book-grid">
+                    {% for item in recommendations %}
+                        <article class="book-card">
+                            <div class="book-cover">
+                                {% if item.image_url %}
+                                    <img src="{{ item.image_url }}" alt="Cover image for {{ item.title }}" loading="lazy">
+                                {% else %}
+                                    <div class="cover-fallback">No cover</div>
+                                {% endif %}
+                            </div>
+                            <h3>{{ item.title }}</h3>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    </main>
+</body>
+</html>

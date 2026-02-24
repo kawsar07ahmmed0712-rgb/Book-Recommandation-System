@@ -1,7 +1,8 @@
-scikit-learn 
-pandas 
-numpy 
-matplotlib 
+scikit-learn
+pandas
+numpy
+matplotlib
 pyYAML
+flask
 streamlit
 -e .

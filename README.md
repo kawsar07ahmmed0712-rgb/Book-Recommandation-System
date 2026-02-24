@@ -1,38 +1,31 @@
-# Book-Recommandation-System
+# Book Recommendation System
 
+A collaborative filtering book recommender with an end-to-end training pipeline and a Flask web application UI.
 
-## workflow 
-- config.yaml
-- entity
-- config/configuration.py
-- component
-- pipeline 
-- endpoint 
-- app.py 
+## Project workflow
+- `config/config.yaml`
+- `books_recommender/entity`
+- `books_recommender/config/configuration.py`
+- `books_recommender/components`
+- `books_recommender/pipeline`
+- `app.py` (Flask web app)
 
-
-
-# How to run? 
-### STEPS:
-
-Clone the repository 
+## Setup
+1. Create and activate your environment.
+2. Install dependencies:
 
 ```bash
-https://github.com/kawsar07ahmmed0712-rgb/Book-Recommandation-System.git
+pip install -r requirements.txt
 ```
 
-### STEP 01- Create a conda environment after opening the repositry 
-
+## Run training pipeline
 ```bash
-conda create -n books python=3.7.10 -y 
+python main.py
 ```
 
-```bash 
-conda activate books 
+## Run web app
+```bash
+python app.py
 ```
 
-### 3 STEP 02 - install the requirements 
-```bash 
-pip install -r requirements.txt 
-``` 
-
+Then open: `http://127.0.0.1:5000`
